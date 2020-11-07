@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform skin;
 
-    public int numeroCombo;
-    public float tempoCombo;
+    public int comboNum;
+    public float comboTime;
 
     // Start is called before the first frame update
     void Start()
@@ -26,24 +26,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tempoCombo = tempoCombo + Time.deltaTime;
-
-        if (Input.GetButtonDown("Fire1") && tempoCombo > 0.5f)
+        if (GetComponent<Character>().life <= 0)
         {
-            numeroCombo++;
+            this.enabled = false;
+        }
+        comboTime = comboTime + Time.deltaTime;
 
-            if (numeroCombo > 2)
+        if (Input.GetButtonDown("Fire1") && comboTime > 0.5f)
+        {
+            comboNum++;
+
+            if (comboNum > 2)
             {
-                numeroCombo = 1;
+                comboNum = 1;
             }
 
-            tempoCombo = 0;
-            skin.GetComponent<Animator>().Play("PlayerAtack" + numeroCombo, -1);
+            comboTime = 0;
+            skin.GetComponent<Animator>().Play("PlayerAtack" + comboNum, -1);
         }
 
-        if (tempoCombo >=  1)
+        if (comboTime >= 1)
         {
-            numeroCombo = 0;
+            comboNum = 0;
         }
 
 
