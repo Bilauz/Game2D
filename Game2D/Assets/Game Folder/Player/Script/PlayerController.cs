@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     public int comboNum;
     public float comboTime;
+    public float dashTime;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        dashTime = dashTime + Time.deltaTime;
+        if (Input.GetButtonDown("Fire2") && dashTime > 1)
+        {
+            dashTime = 0;
+            skin.GetComponent<Animator>().Play("PlayerDash", -1);
+            rig.velocity = Vector2.zero;
+            rig.AddForce(new Vector2(skin.localScale.x * 150, 0));
+        }
+
         if (GetComponent<Character>().life <= 0)
         {
             this.enabled = false;
@@ -76,6 +86,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rig.velocity = vel;
+        if (dashTime > 0.5)
+        {
+            rig.velocity = vel;
+        }
+
     }
 }
